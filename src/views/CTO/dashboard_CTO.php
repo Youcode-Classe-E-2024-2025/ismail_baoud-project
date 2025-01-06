@@ -133,6 +133,7 @@ $CSRF = generateCsrfToken();
                             <a href="#" class="nav-link" onclick="showTab('team')">Team</a>
                             <a href="#" class="nav-link" onclick="showTab('assign-tasks')">Assign Tasks</a>
                             <a href="#" class="nav-link" onclick="showTab('categories')">Categories</a>
+                            <a href="#" class="nav-link" onclick="showTab('permessions')">Permessions</a>
                             <a href="/logOut" class="nav-link">Logout</a>
                         </div>
                     </div>
@@ -322,7 +323,49 @@ $CSRF = generateCsrfToken();
             </div>
         </div>
     </div>
-
+     <!-- Team Section -->
+     <div id="permessions-section" class="tab-content hidden">
+    <h1 class="text-4xl font-bold  mb-8 text-center">Team Management</h1>
+    
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="flex items-center mb-4 flex justify-center">
+            <h2 class="text-xl font-semibold text-center">Manage Roles and Permissions</h2>
+        </div>
+        <p class="text-gray-600 dark:text-gray-300 mb-4 text-center">Select the permissions for each role below:</p>
+        <div class="flex justify-center space-x-2">
+            <form action="/permessions" method="POST" class="w-full">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="py-2 text-left">ROLE</th>
+                            <th class="py-2 text-left">Create</th>
+                            <th class="py-2 text-left">Delete</th>
+                            <th class="py-2 text-left">Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-300">
+                            <td class="py-2" >ROLE 1</td>
+                            <td class="py-2"><input type="checkbox" name="role1_create" id="role1_create"></td>
+                            <td class="py-2"><input type="checkbox" name="role1_delete" id="role1_delete"></td>
+                            <td class="py-2"><input type="checkbox" name="role1_update" id="role1_update"></td>
+                        </tr>
+                        <div class="flex justify-end space-x-2">
+                    
+                </div>
+                        <!-- Add more roles as needed -->
+                    </tbody>
+                </table>
+                <div class="flex justify-end mb-6">
+    <button type="submit" name="btn_permession"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Change Permessions
+                    </button>
+    </div>
+            </form>
+        </div>
+    </div>
+</div>
     <!-- Modals -->
     <!-- Create Project Modal -->
     <div id="createProjectModal"

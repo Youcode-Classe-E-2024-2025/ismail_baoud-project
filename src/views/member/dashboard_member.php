@@ -334,6 +334,123 @@ if (!empty($_SESSION["login_success"])) {
             </div>
         </div>
     <?php endforeach ?>
+
+    <?php
+    $res = new info_cto();
+    $results = $res->get_cto($_SESSION["member_id"]);
+    $result = $results["CTO_id"];
+    if(1 == 0):?>
+    
+    <div id="assignTaskModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-dark-card rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-bold mb-4">Assign New Task</h3>
+            <form action="/tache" method="post" id="assignTaskForm" class="space-y-4" method="post"
+                action="/api/tasks/assign">
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="taskTitle">Task Title</label>
+                    <input type="text" id="taskTitle" name="title" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="taskDescription">Description</label>
+                    <textarea id="taskDescription" name="description" rows="3" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="taskProject">Project</label>
+                    <select id="taskProject" name="projet_id" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                        <option name="">Select a project</option>
+                        <?php
+                        $project = new _projet();
+                        $projets = $project->display_project($result);
+                        if ($projets == null) {
+                            $projets = [];
+                        }
+                        foreach ($projets as $projet): ?>
+                            <option value="<?= htmlspecialchars($projet['id']) ?>">
+                                <?= htmlspecialchars($projet['title']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="taskAssignee">Assign To</label>
+                    <select id="taskAssignee" name="member_id" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                        <option value="">Select member</option>
+                        <?php
+                        try {
+                            $res = new equipe_handling();
+                            $members = $res->_display($result);
+                            if ($members == null) {
+                                $members = [];
+                            }
+
+                            foreach ($members as $member) {
+
+                                echo '<option value="' . htmlspecialchars($member['member_id']) . '">' .
+                                    htmlspecialchars($member['fullname']) .
+                                    '</option>';
+                            }
+                        } catch (Exception $e) {
+                            error_log("Error loading categories: " . $e->getMessage());
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="taskPriority">Priority</label>
+                    <select id="taskPriority" name="priority" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                        <option value="">priority</option>
+                        <option value="BASIQUE">BASIQUE</option>
+                        <option value="BUG">BUG</option>
+                        <option value="FONCTIONNALITE">FONCTIONNALITE</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="projectCategory">Category</label>
+                    <select id="projectCategory" name="category_id" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                        <option value="">Select a category</option>
+                        <?php
+                        try {
+                            $categories = category_handling::display($result);
+                            foreach ($categories as $category) {
+                                echo '<option value="' . htmlspecialchars($category['category_id']) . '">' .
+                                    htmlspecialchars($category['name']) .
+                                    '</option>';
+                            }
+                        } catch (Exception $e) {
+                            error_log("Error loading categories: " . $e->getMessage());
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="taskDueDate">Due Date</label>
+                    <input type="date" id="taskDueDate" name="date" required
+                        class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                </div>
+                <!-- CSRF Token -->
+                <input type="hidden" name="csrf_token" value="">
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="hideModal('assignTask')"
+                        class="px-4 py-2 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100">
+                        Cancel
+                    </button>
+                    <button type="submit" name="btn_tache" value="tache"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        Assign Task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="public/assets/js/cto.js"></script>
+    <?php endif;?>
     <style>
         .nav-link {
             @apply text-gray-600 dark: text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors;
@@ -504,7 +621,7 @@ if (!empty($_SESSION["login_success"])) {
                 e.stopPropagation();
             });
         });
-
+  
     </script>
 </body>
 
