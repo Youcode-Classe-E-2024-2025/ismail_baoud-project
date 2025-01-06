@@ -104,15 +104,12 @@ if (!empty($_SESSION["login_success"])) {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white dark:bg-dark-card rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">Todo</h3>
-                <p class="text-3xl font-bold text-blue-600"><?= $todo_count ?></p>
             </div>
             <div class="bg-white dark:bg-dark-card rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">In Progress</h3>
-                <p class="text-3xl font-bold text-green-600"><?= $doing_count ?></p>
             </div>
             <div class="bg-white dark:bg-dark-card rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold text-gray-600 dark:text-gray-300 mb-2">Completed</h3>
-                <p class="text-3xl font-bold text-purple-600"><?= $done_count ?></p>
             </div>
         </div>
 
