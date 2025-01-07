@@ -75,27 +75,13 @@ CREATE TABLE tache (
 
 CREATE TABLE ROLE (
     role_id INT PRIMARY KEY AUTO_INCREMENT,
-    role_name varchar(255) not null,
-    permession_id int,
-    foreign key (permession_id) REFERENCES permission(permession_id)
+    role_name varchar(255) not null
     
 ) ENGINE=InnoDB;
 
 responsable_de_creation , 1
 responsable_de_supression , 2
 
-
-
-CREATE TABLE ROLE_permission (
-    role_id int, 
-    member_id int,
-    foreign key (role_id) REFERENCES ROLE (role_id),
-    foreign key (member_id) REFERENCES member(member_id)
-    
-) ENGINE=InnoDB;
-
-1, 2(member_id)
-2, 3(member_id)
 
 CREATE TABLE  permission(
     permession_id INT PRIMARY KEY AUTO_INCREMENT,
