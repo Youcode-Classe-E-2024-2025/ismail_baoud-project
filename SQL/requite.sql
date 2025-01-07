@@ -82,6 +82,13 @@ CREATE TABLE ROLE (
 responsable_de_creation , 1
 responsable_de_supression , 2
 
+CREATE TABLE  role_permission(
+    role_id int,
+    permession_id int,
+    foreign key (role_id) REFERENCES ROLE(role_id),
+    foreign key (permession_id) REFERENCES permission(permession_id)
+    
+) ENGINE=InnoDB;
 
 CREATE TABLE  permission(
     permession_id INT PRIMARY KEY AUTO_INCREMENT,

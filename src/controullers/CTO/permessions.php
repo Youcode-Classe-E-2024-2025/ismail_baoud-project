@@ -1,31 +1,64 @@
 <?php 
 class role_permession {
     private $db;
-}
-if(isset($_POST["btn_permession"])){
-    $role = $_POST["role"];
-    $create = isset($_POST["role1_create"])  ? "on" : "off";
-    $delete = isset($_POST["role1_delete"]) ? "on" : "off";
-    $update = isset($_POST["role1_update"])  ? "on" : "off";
-    echo $role;
-    if($create == "on"){
 
-        echo $create;
+    public function __construct(){
+        $db = new ConnectionDB;
+        $conn = $db->getConnection();
+        $this->db = $conn;
     }
-    if($delete == "on"){
 
-        
-        echo $delete;
+    public function add_roles($role){
+        $res = new role($role);
+        $res->add_to_db($this->db);
     }
-    if($update == "on"){
-
-        echo $update;
-    }
+    public function get_roles(){
+        return role::get_role($this->db);
     
+    }
+
+    public function add_permessions($roles){
+        foreach ($roles as $role_id) {
+            $clearQuery = "DELETE FROM role_permission WHERE role_id = ?";
+            $stmt = $this->db->prepare($clearQuery);
+            $stmt->execute([$role_id]);
+    
+            for ($permission_id = 1; $permission_id <= 3; $permission_id++) {
+                $permissionKey = "role{$role_id}_permission{$permission_id}";
+                if (isset($_POST[$permissionKey])) {
+                    $insertQuery = "INSERT INTO role_permission (role_id, permession_id) VALUES (?, ?)";
+                    $stmt = $this->db->prepare($insertQuery);
+                    $stmt->execute([$role_id, $permission_id]);
+                }
+            }
+        }
+    }
+
+
+
+    public function role($role){
+            $query = "SELECT role_id from ROLE where role_name = '$role'";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+    }
+
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $roles = $_POST['roles'];
+    $db = new role_permession();
+    $conn = $db->add_permessions($roles);
+
+    
+
+    header("location: /CTO_dashboard");
+}
+
 if(isset($_POST["btn_role"])){
     $role= $_POST["role_create"];
-    
+    $res = new role_permession();
+    $res->add_roles($role);
 }
 
 

@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-class Category
+class role
 {
     private $name;
 
@@ -20,6 +20,18 @@ class Category
             return true;
         } catch (PDOException $e) {
             error_log("Error adding category: " . $e->getMessage());
+            return false;
+        }
+    }
+    public static function get_role($conn)
+    {
+        try {
+            $query = "SELECT * FROM ROLE";
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error giving data: " . $e->getMessage());
             return false;
         }
     }

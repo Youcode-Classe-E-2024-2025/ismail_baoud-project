@@ -362,12 +362,28 @@ $CSRF = generateCsrfToken();
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b border-gray-300">
-                            <td class="py-2 flex justify-center"><input class="outline-none text-center" name="role" value="ROLE1" id="role1_create" readonly></td>
-                            <td class="py-2"><input type="checkbox" name="role1_create" id="role1_create" checked></td>
-                            <td class="py-2"><input type="checkbox" name="role1_delete" id="role1_delete"></td>
-                            <td class="py-2"><input type="checkbox" name="role1_update" id="role1_update"></td>
-                        </tr>
+                        <?php 
+                         $res = new role_permession();
+                         $result = $res->get_roles();
+                            foreach($result as $res):
+
+                        ?>
+                          <tr class="border-b border-gray-300">
+        <td class="py-2 flex justify-center">
+            <input type="hidden" name="roles[]" value="<?=$res["role_id"]?>">
+            <span class="outline-none text-center"><?=$res["role_name"]?></span>
+        </td>
+        <td class="py-2">
+            <input type="checkbox" value="1" name="role<?=$res["role_id"]?>_permission1">
+        </td>
+        <td class="py-2">
+            <input type="checkbox" value="2" name="role<?=$res["role_id"]?>_permission2">
+        </td>
+        <td class="py-2">
+            <input type="checkbox" value="3" name="role<?=$res["role_id"]?>_permission3">
+        </td>
+    </tr>
+                        <?php endforeach; ?>
                         <div class="flex justify-end space-x-2">
                     
                 </div>
