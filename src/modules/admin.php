@@ -14,7 +14,7 @@ class admin extends User
     public function add_to_db($db)
     {
         try {
-            $query = "INSERT INTO admin (fullname, email, password) VALUES (?, ?, ?)";
+            $query = "INSERT INTO user (fullname, email, password) VALUES (?, ?, ?)";
             $stmt = $db->prepare($query);
             $stmt->execute([$this->fullname, $this->email, password_hash($this->password, PASSWORD_DEFAULT)]);
             return true;
@@ -26,7 +26,7 @@ class admin extends User
     static function get_admins($db)
     {
         try {
-            $query = "SELECT id,fullname, email FROM admin";
+            $query = "SELECT fullname, email FROM user";
             $stmt = $db->prepare($query);
             $stmt->execute();
             $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -63,7 +63,7 @@ if (isset($_POST["btn_signup"])) {
     $image = $_FILES["image"];
     $imageData = file_get_contents($image['tmp_name']);
 
-    // Validation du nom d'utilisateur
+
     if (empty($username) || !preg_match($nameregex, $username)) {
         $isvalide = false;
         $_SESSION["errname"] = "Nom invalide. Veuillez entrer un nom valide.";
@@ -71,7 +71,7 @@ if (isset($_POST["btn_signup"])) {
         $_SESSION["errname"] = "Nom valide.";
     }
 
-    // Validation de l'email
+
     if (empty($email) || !preg_match($emailregex, $email)) {
         $isvalide = false;
         $_SESSION["erremail"] = "Email invalide. Veuillez entrer un email valide.";
@@ -79,7 +79,6 @@ if (isset($_POST["btn_signup"])) {
         $_SESSION["erremail"] = "Email valide.";
     }
 
-    // Validation du mot de passe
     if (empty($password) || strlen($password) < 8) {
         $isvalide = false;
         $_SESSION["errpass"] = "Mot de passe invalide. Il doit contenir au moins 8 caractères.";
@@ -95,7 +94,7 @@ if (isset($_POST["btn_signup"])) {
     } else {
         $_SESSION["infoerr"] = "Inscription invalide. Veuillez corriger les erreurs suivantes : " .
             $_SESSION["errname"] . " " . $_SESSION["erremail"] . " " . $_SESSION["errpass"];
-        header('Location: /register');
+        header('Location: /');
         exit();
     }
 }
