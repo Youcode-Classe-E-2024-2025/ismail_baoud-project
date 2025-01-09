@@ -13,7 +13,6 @@ require_once "src/modules/tache.class.php";
 require_once "src/controullers/member/tache.php";
 require_once "src/controullers/member/getinformations.php";
 require_once "src/controullers/member/statistics.php";
-require_once "src/controullers/member/get_cto.php";
 require_once "src/controullers/CTO/projet.php";
 require_once "src/controullers/CTO/category_add.php";
 require_once "src/controullers/CTO/tache.php";
@@ -43,8 +42,7 @@ $routes = [
     "/projet_create"=>"src/controullers/CTO/projet.php",
     "/manage_equipe"=>"src/controullers/CTO/manage_equipe.php",
     "/tache"=>"src/controullers/CTO/tache.php",
-    "/category"=>"src/controullers/CTO/category_add.php",
-    "/permessions"=>"src/controullers/CTO/permessions.php"
+    "/category"=>"src/controullers/CTO/category_add.php"
 
 ];
 

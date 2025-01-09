@@ -73,6 +73,7 @@ CREATE TABLE tache (
 
 ) ENGINE=InnoDB;
 
+<<<<<<< HEAD
 CREATE TABLE ROLE (
     role_id INT PRIMARY KEY AUTO_INCREMENT,
     role_name varchar(255) not null
@@ -98,6 +99,8 @@ CREATE TABLE  permission(
 
 1, creation 
 2, supression
+=======
+>>>>>>> parent of 32a902b (ajouter un tablue pour check les permession de quelqeu role)
 
 INSERT INTO admin (fullname, email, password) VALUES
 ('Super Admin', 'admin@projectmanagement.com', '$2y$10$abcdefghijklmnopqrstuuQPXMqOCGMB.xkZxhLlCl3X4TjX9Xjm');

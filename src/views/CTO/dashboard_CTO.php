@@ -133,7 +133,6 @@ $CSRF = generateCsrfToken();
                             <a href="#" class="nav-link" onclick="showTab('team')">Team</a>
                             <a href="#" class="nav-link" onclick="showTab('assign-tasks')">Assign Tasks</a>
                             <a href="#" class="nav-link" onclick="showTab('categories')">Categories</a>
-                            <a href="#" class="nav-link" onclick="showTab('permessions')">Permessions</a>
                             <a href="/logOut" class="nav-link">Logout</a>
                         </div>
                     </div>
@@ -323,6 +322,7 @@ $CSRF = generateCsrfToken();
             </div>
         </div>
     </div>
+<<<<<<< HEAD
                     
     
      <!-- Team Section -->
@@ -400,6 +400,9 @@ $CSRF = generateCsrfToken();
         </div>
     </div>
 </div>
+=======
+
+>>>>>>> parent of 32a902b (ajouter un tablue pour check les permession de quelqeu role)
     <!-- Modals -->
     <!-- Create Project Modal -->
     <div id="createProjectModal"
