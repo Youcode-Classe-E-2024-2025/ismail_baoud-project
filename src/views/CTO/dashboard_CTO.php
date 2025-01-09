@@ -363,11 +363,10 @@ $CSRF = generateCsrfToken();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
+                    <?php 
                          $res = new role_permession();
                          $result = $res->get_roles();
                             foreach($result as $res):
-
                         ?>
                           <tr class="border-b border-gray-300">
         <td class="py-2 flex justify-center">
@@ -690,7 +689,7 @@ $CSRF = generateCsrfToken();
             document.getElementById(tabName + '-section').classList.remove('hidden');
 
             // Update active tab styling
-            document.querySelectorAll('.nav-link').forEach(link => {
+   document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             event.target.classList.add('active');

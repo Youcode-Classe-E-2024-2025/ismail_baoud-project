@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "mblode.pretty-formatter"
+        "mblode.pretty-formatter",
+        "esbenp.prettier-vscode"
     ]
 }

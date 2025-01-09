@@ -48,7 +48,7 @@ if (!class_exists('role_permession')) {
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["btn_permession"])) {
     
-    $roles = $_POST['role_create'];
+    $roles = $_POST['roles'];
     $db = new role_permession();
     $conn = $db->add_permessions($roles);
 
