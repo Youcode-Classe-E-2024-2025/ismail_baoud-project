@@ -328,25 +328,26 @@ $CSRF = generateCsrfToken();
     
      <!-- Team Section -->
     <div id="permession-section" class="tab-content hidden">
-        <div class="bg-white dark:bg-dark-card rounded-lg p-6 w-full">
-                
-                        <h1 class="text-4xl font-bold  mb-8 text-center">Role Management</h1>
-                    <form action="/permessions" method="post">
-                        <div>
-                            <label class="block text-sm text-center font-bold mb-1" for="projectName">Project Name</label>
-                            <input type="text" id="projectName" name="role_create" required
-                            class="w-full p-2 text-center border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                        </div> 
-                            <div class="flex justify-center mb-6 mt-6 " >
-                        <button type="submit" name="btn_role"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                            Create Role
-                        </button>
-                    </form>
-                    </div>
+        
     <h1 class="text-4xl font-bold  mb-8 text-center">ROLE Management</h1>
     
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <div class="bg-white dark:bg-dark-card rounded-lg p-6 w-full">
+                
+                <h1 class="text-4xl font-bold  mb-8 text-center">Role Management</h1>
+            <form action="/permessions" method="post"> -->
+                <div>
+                    <!-- <label class="block text-sm text-center font-bold mb-1" for="projectName">Project Name</label> -->
+                    <!-- <input type="text"  name="role_create" required -->
+                    <!-- class="w-full p-2 text-center border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"> -->
+               </div> 
+                    <!-- <div class="flex justify-center mb-6 mt-6 " > -->
+                <button type="submit" name="btn_role"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Create Role
+                </button>
+            </form>
+            </div>
         <div class="flex items-center mb-4 flex justify-center">
             <h2 class="text-xl font-semibold text-center">Manage Roles and Permissions</h2>
         </div>
@@ -364,26 +365,45 @@ $CSRF = generateCsrfToken();
                     </thead>
                     <tbody>
                     <?php 
-                         $res = new role_permession();
-                         $result = $res->get_roles();
-                            foreach($result as $res):
-                        ?>
-                          <tr class="border-b border-gray-300">
-        <td class="py-2 flex justify-center">
-            <input type="hidden" name="roles[]" value="<?=$res["role_id"]?>">
-            <span class="outline-none text-center"><?=$res["role_name"]?></span>
-        </td>
-        <td class="py-2">
-            <input type="checkbox" value="1" name="role<?=$res["role_id"]?>_permission1">
-        </td>
-        <td class="py-2">
-            <input type="checkbox" value="2" name="role<?=$res["role_id"]?>_permission2">
-        </td>
-        <td class="py-2">
-            <input type="checkbox" value="3" name="role<?=$res["role_id"]?>_permission3">
-        </td>
-    </tr>
-                        <?php endforeach; ?>
+
+$res = new role_permession();
+$result = $res->get_roles();
+foreach($result as $res):
+    $rese = new role_permession();
+    $result_1 = $rese->permessions($res["role_id"]);
+    $one = null;
+    $two = null;
+    $three = null;
+   foreach($result_1 as $resul){
+    switch ($resul["permession_id"]){
+       
+        case 1 : $one = null;   $one = 1 ;
+        break;
+        case 2 : $two = null ; $two = 2 ;
+        break;
+        case 3 :  $three = null ; $three = 3 ;
+        break;
+        
+    }
+   }
+    ?>
+    <tr class="border-b border-gray-300">
+<td class="py-2 flex justify-center">
+<input type="hidden" name="roles[]" value="<?=$res["role_id"]?>">
+<span class="outline-none text-center"><?=$res["role_name"]?></span>
+</td>
+<td class="py-2">
+<input type="checkbox" value="1" name="role<?=$res["role_id"]?>_permission1" <?php if($one == 1){  echo 'checked'; } ?>>
+</td>
+<td class="py-2">
+<input type="checkbox" value="2" name="role<?=$res["role_id"]?>_permission2" <?php if($two == 2){  echo 'checked'; }  ?>>
+</td>
+<td class="py-2">
+<input type="checkbox" value="3" name="role<?=$res["role_id"]?>_permission3" <?php if($three == 3){  echo 'checked'; }  ?>>
+</td>
+</tr>
+<?php endforeach; ?>
+
                         <div class="flex justify-end space-x-2">
                     
                 </div>

@@ -20,6 +20,7 @@ if (!class_exists('role_permession')) {
 
         public function add_permessions($roles){
             foreach ($roles as $role_id) {
+                var_dump($role_id);
                 $query = "DELETE FROM role_permission WHERE role_id = ?";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute([$role_id]);
@@ -35,6 +36,12 @@ if (!class_exists('role_permession')) {
             }
         }
 
+        public function permessions($id){
+            $query = "SELECT permession_id from role_permission where role_id = $id";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 
 
         public function role($role){
