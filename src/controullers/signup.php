@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -38,11 +37,14 @@ class signup
                 return false;
             }
             $is_exest = admin::get_admins($this->db);
-            if ($is_exest->rowCount() > 0) {
+            if (count($is_exest) > 0) {
                 $member = new member($this->username, $this->email, $this->password, $this->imageData);
+                echo "admin";
                 return $member->add_to_db($this->db);
             } else {
                 $member = new admin($this->username, $this->email, $this->password);
+                echo "member";
+
                 return $member->add_to_db($this->db);
             }
         } catch (PDOException $e) {
@@ -91,11 +93,14 @@ if (isset($_POST["btn_signup"])) {
         $user = new signup();
         $user->signupset($username, $email, $password, $imageData);
         header('Location: /');
+
         exit();
     } else {
         $_SESSION["infoerr"] = "Inscription invalide. Veuillez corriger les erreurs suivantes : " .
             $_SESSION["errname"] . " " . $_SESSION["erremail"] . " " . $_SESSION["errpass"];
-        header('Location: /register');
+            header('Location: /');
+
+  
         exit();
     }
 }

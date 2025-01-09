@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once 'user.php';
 
 class member extends User
 {
@@ -25,7 +24,6 @@ class member extends User
             $stmt->bindparam(":password", $hashed_password);
             $stmt->bindParam(":image", $this->image, PDO::PARAM_LOB);
             $stmt->execute();
-
             return true;
         } catch (PDOException $e) {
             return false;

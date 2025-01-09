@@ -2,6 +2,8 @@
 session_start();
 require_once "config/connectiondb.class.php";
 include_once "helpers/debug.php";
+include_once "src/modules/user.php";
+
 include_once "src/modules/admin.php";
 include_once "src/modules/category.php";
 include_once "src/modules/CTO.class.php";
@@ -23,15 +25,11 @@ require_once "src/controullers/admin/member.php";
 require_once "src/controullers/admin/projet.php";
 require_once "src/controullers/admin/statistics.php";
 
-
-
-
 $uri = parse_url($_SERVER["REQUEST_URI"])["path"];
 $routes = [
     "/"=>"public/index.php",
     "/index.php"=>"public/index.php",
     "/login"=>"src/controullers/login.php",
-    "/signup"=>"src/controullers/signup.php",
     "/logOut"=>"src/controullers/logOut.php",
     "/admin_dashboard"=>"src/views/admin/dashboard_admin.php",
     "/CTO_dashboard"=>"src/views/CTO/dashboard_CTO.php",
@@ -42,7 +40,9 @@ $routes = [
     "/projet_create"=>"src/controullers/CTO/projet.php",
     "/manage_equipe"=>"src/controullers/CTO/manage_equipe.php",
     "/tache"=>"src/controullers/CTO/tache.php",
-    "/category"=>"src/controullers/CTO/category_add.php"
+    "/category"=>"src/controullers/CTO/category_add.php",
+    "/permessions"=>"src/controullers/CTO/permessions.php",
+    "/signup_handler"=>"src/controullers/signup.php"
 
 ];
 

@@ -28,9 +28,13 @@ class admin extends User
         try {
             $query = "SELECT id,fullname, email FROM admin";
             $stmt = $db->prepare($query);
+            
+            
+            
             $stmt->execute();
-            $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $stmt;
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
         } catch (PDOException $e) {
             return false;
         }

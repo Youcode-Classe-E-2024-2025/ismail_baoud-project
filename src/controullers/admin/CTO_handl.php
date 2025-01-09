@@ -65,6 +65,7 @@ class add_CTO
         return $CTOs;
     }
 }
+
 if (isset($_POST["CTO_create"])) {
     $id = $_POST["CTO_id"];
     $res = new add_CTO();

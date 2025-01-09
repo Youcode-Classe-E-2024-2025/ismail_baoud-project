@@ -71,6 +71,7 @@ $done = 0;
 
 $stat = new statistics();
 $members = $stat->members();
+
 foreach ($members as $member) {
     $total_members++;
 }

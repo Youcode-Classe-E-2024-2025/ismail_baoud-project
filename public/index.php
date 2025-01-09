@@ -30,6 +30,7 @@ if(!empty($_SESSION["infoerr"])){
 </script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+
     <script>
         <?php if (!empty($secces)): ?>
             Swal.fire({
@@ -96,6 +97,8 @@ if(!empty($_SESSION["infoerr"])){
         </div>
     </div>
 
+   
+
     <!-- Auth Section -->
     <div id="auth-section" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
@@ -120,10 +123,12 @@ if(!empty($_SESSION["infoerr"])){
                     </p>
                 </div>
 
+                
+
                 <!-- Sign Up Form -->
                 <div id="signup-form" class="auth-form hidden">
                     <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Sign Up</h2>
-                    <form action="/signup" method="post" class="space-y-4" enctype="multipart/form-data">
+                    <form action="/signup_handler" method="post" class="space-y-4" enctype="multipart/form-data">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
                             <input type="text" name="username" class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
@@ -137,7 +142,7 @@ if(!empty($_SESSION["infoerr"])){
                             <input type="password" name="password" class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
                         </div>
                         <label class="block text-gray-700 dark:text-gray-300 mb-2">Foto Profile</label>
-                        <input type="file" name="image" required>
+                        <input type="file" name="image">
                             
                     
                         <button type="submit" name="btn_signup" value="signUp" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">Sign Up</button>
@@ -157,6 +162,5 @@ if(!empty($_SESSION["infoerr"])){
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </body>
 </html>
