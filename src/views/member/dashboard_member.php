@@ -1,7 +1,9 @@
 <?php
-if ($_SESSION["role"] !== "member") {
-    header('location: error/404.php ');
+
+if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "member") {
+    header("Location: error/404.php");
 }
+
 if (!empty($_SESSION["login_success"])) {
     $secces = $_SESSION["login_success"];
 }
@@ -130,10 +132,11 @@ if (!empty($_SESSION["login_success"])) {
 
                         foreach ($taches as $tache):
                             ?>
-                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move">
+                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move" data-task-id="<?= $tache['id'] ?>">
                                 <div class="flex justify-between items-start mb-3">
                                     <h3 class="text-lg font-semibold"><?= $tache["title"] ?></h3>
                                     <span class="text-sm text-blue-600 dark:text-blue-400"><?= $tache["tag"] ?></span>
+                                    <span class=" hidden text-xs text-gray-500">ID: <?= $tache['id'] ?></span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3"><?= $tache["description"] ?></p>
                                 <div class="flex justify-between items-center">
@@ -163,10 +166,11 @@ if (!empty($_SESSION["login_success"])) {
 
                         foreach ($taches as $tache):
                             ?>
-                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move">
+                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move" data-task-id="<?= $tache['id'] ?>">
                                 <div class="flex justify-between items-start mb-3">
                                     <h3 class="text-lg font-semibold"><?= $tache["title"] ?></h3>
                                     <span class="text-sm text-blue-600 dark:text-blue-400"><?= $tache["tag"] ?></span>
+                                    <span class="hiddentext-xs text-gray-500">ID: <?= $tache['id'] ?></span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3"><?= $tache["description"] ?></p>
                                 <div class="flex justify-between items-center">
@@ -198,10 +202,11 @@ if (!empty($_SESSION["login_success"])) {
 
                         foreach ($taches as $tache):
                             ?>
-                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move">
+                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move" data-task-id="<?= $tache['id'] ?>">
                                 <div class="flex justify-between items-start mb-3">
                                     <h3 class="text-lg font-semibold"><?= $tache["title"] ?></h3>
                                     <span class="text-sm text-blue-600 dark:text-blue-400"><?= $tache["tag"] ?></span>
+                                    <span class="hidden text-xs text-gray-500">ID: <?= $tache['id'] ?></span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3"><?= $tache["description"] ?></p>
                                 <div class="flex justify-between items-center">
@@ -427,14 +432,43 @@ if (!empty($_SESSION["login_success"])) {
 
                 sortable.on('sortable:stop', (evt) => {
                     const task = evt.data.dragEvent.data.source;
+                    const taskId = task.dataset.taskId; // Get the task ID
                     const newStatus = evt.data.newContainer.dataset.status;
 
-                    // Update task styling based on new status
-                    updateTaskStyle(task, newStatus);
+                    // Send AJAX request to update the task status
+                    $.ajax({
+                        url: '/update_status', // Ensure this path is correct
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ taskId: taskId, newStatus: newStatus }),
+                        success: (response) => {
+                            const result = JSON.parse(response);
+                            if (result.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: result.message,
+                                    icon: 'success',
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: result.message,
+                                    icon: 'error',
+                                });
+                            }
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Failed to update task status : ' + textStatus,
+                                icon: 'error',
+                            });
+                        }
+                    });
                 });
             }
         });
-        œ
+
         // Update task card styling based on status
         function updateTaskStyle(taskElement, status) {
             const statusBadge = taskElement.querySelector('.status-badge');
@@ -506,6 +540,40 @@ if (!empty($_SESSION["login_success"])) {
         });
 
     </script>
+    <?php
+// Get raw POST data
+$data = file_get_contents('php://input');
+
+// Decode JSON data
+$decodedData = json_decode($data, true);
+
+// Check if data is valid
+if (isset($decodedData['taskId']) && isset($decodedData['newStatus'])) {
+    $taskId = $decodedData['taskId'];
+    $newStatus = $decodedData['newStatus'];
+
+    // Example: Update the database
+    // Replace with your actual database connection and query
+    $res = new ConnectionDB();
+    $pdo = $res->getConnection();
+    $stmt = $pdo->prepare('UPDATE tasks SET status = :status WHERE id = :id');
+    $stmt->bindParam(':status', $newStatus);
+    $stmt->bindParam(':id', $taskId);
+
+    try {
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Task updated successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update task']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid data received']);
+}
+?>
+
 </body>
 
 </html>

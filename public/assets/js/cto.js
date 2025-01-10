@@ -90,25 +90,6 @@ function initializeCharts() {
     }
 }
 
-// Kanban Board Management
-function initializeKanbanBoard() {
-    const containers = document.querySelectorAll('.kanban-column');
-    if (containers.length) {
-        const sortable = new Draggable.Sortable(containers, {
-            draggable: '.task-card',
-            handle: '.task-card',
-            mirror: {
-                constrainDimensions: true,
-            }
-        });
-
-        sortable.on('drag:stop', (event) => {
-            const taskId = event.source.dataset.taskId;
-            const newStatus = event.newContainer.dataset.status;
-            updateTaskStatus(taskId, newStatus);
-        });
-    }
-}
 
 // Form Submissions
 function handleFormSubmission(formId, endpoint) {

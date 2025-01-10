@@ -335,17 +335,18 @@ $CSRF = generateCsrfToken();
     <div class="bg-white dark:bg-dark-card rounded-lg p-6 w-full">
                 
                 <h1 class="text-4xl font-bold  mb-8 text-center">Role Management</h1>
-            <form action="/permessions" method="post"> -->
+            <form action="/permessions" method="post"> 
                 <div>
-                    <!-- <label class="block text-sm text-center font-bold mb-1" for="projectName">Project Name</label> -->
-                    <!-- <input type="text"  name="role_create" required -->
-                    <!-- class="w-full p-2 text-center border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"> -->
+                    <label class="block text-sm text-center font-bold mb-1" for="projectName">Project Name</label>
+                    <input type="text"  name="role_create" required
+                    class="w-full p-2 text-center border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
                </div> 
-                    <!-- <div class="flex justify-center mb-6 mt-6 " > -->
+                    <div class="flex justify-center mb-6 mt-6 " >
                 <button type="submit" name="btn_role"
                     class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                     Create Role
                 </button>
+                </div>
             </form>
             </div>
         <div class="flex items-center mb-4 flex justify-center">

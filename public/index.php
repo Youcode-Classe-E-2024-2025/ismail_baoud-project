@@ -2,6 +2,7 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors',1);
+
 if(!empty($_SESSION["infoerr"])){
     $secces = $_SESSION["infoerr"];
 }
@@ -21,6 +22,7 @@ if(!empty($_SESSION["infoerr"])){
     tailwind.config = {
         darkMode: 'class',
     };
+
     // Check dark mode preference
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
@@ -30,8 +32,8 @@ if(!empty($_SESSION["infoerr"])){
 </script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-
     <script>
+        //sweet allert
         <?php if (!empty($secces)): ?>
             Swal.fire({
                 title: 'error!',
@@ -47,8 +49,11 @@ if(!empty($_SESSION["infoerr"])){
     
        
     </script>
+
     <!-- Navigation Bar -->
+
     <nav class="bg-white dark:bg-gray-800 shadow-md">
+
         <!-- Add your navigation content here -->
     </nav>
 </body>
@@ -76,10 +81,13 @@ if(!empty($_SESSION["infoerr"])){
     </nav>
 
     <!-- Home Section -->
+
     <div id="home-section" class="max-w-6xl mx-auto px-4 py-8">
         <h1 class="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">Discover Public Projects</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
             <!-- Sample Project Cards -->
+
             <?php 
                       $project = new _projet();
                       $projets = $project->display_public_project();
@@ -100,10 +108,13 @@ if(!empty($_SESSION["infoerr"])){
    
 
     <!-- Auth Section -->
+
     <div id="auth-section" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
             <div class="relative">
+
                 <!-- Login Form -->
+
                 <div id="login-form" class="auth-form">
                     <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Login</h2>
                     <form action="/login" method="post" class="space-y-4">
@@ -126,6 +137,7 @@ if(!empty($_SESSION["infoerr"])){
                 
 
                 <!-- Sign Up Form -->
+                 
                 <div id="signup-form" class="auth-form hidden">
                     <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Sign Up</h2>
                     <form action="/signup_handler" method="post" class="space-y-4" enctype="multipart/form-data">
@@ -154,6 +166,7 @@ if(!empty($_SESSION["infoerr"])){
                 </div>
 
                 <!-- Close Button -->
+                 
                 <button onclick="closeAuth()"  class="absolute -top-2 -right-2 bg-gray-200 dark:bg-gray-700 rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600">
                     <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

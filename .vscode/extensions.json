@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "mblode.pretty-formatter",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "nikolaosgeorgiou.html-fmt-vscode"
     ]
 }
