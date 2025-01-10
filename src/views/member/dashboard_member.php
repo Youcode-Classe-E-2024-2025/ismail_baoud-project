@@ -132,11 +132,10 @@ if (!empty($_SESSION["login_success"])) {
 
                         foreach ($taches as $tache):
                             ?>
-                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move" data-task-id="<?= $tache['id'] ?>">
+                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move">
                                 <div class="flex justify-between items-start mb-3">
                                     <h3 class="text-lg font-semibold"><?= $tache["title"] ?></h3>
                                     <span class="text-sm text-blue-600 dark:text-blue-400"><?= $tache["tag"] ?></span>
-                                    <span class=" hidden text-xs text-gray-500">ID: <?= $tache['id'] ?></span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3"><?= $tache["description"] ?></p>
                                 <div class="flex justify-between items-center">
@@ -166,11 +165,10 @@ if (!empty($_SESSION["login_success"])) {
 
                         foreach ($taches as $tache):
                             ?>
-                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move" data-task-id="<?= $tache['id'] ?>">
+                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move">
                                 <div class="flex justify-between items-start mb-3">
                                     <h3 class="text-lg font-semibold"><?= $tache["title"] ?></h3>
                                     <span class="text-sm text-blue-600 dark:text-blue-400"><?= $tache["tag"] ?></span>
-                                    <span class="hiddentext-xs text-gray-500">ID: <?= $tache['id'] ?></span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3"><?= $tache["description"] ?></p>
                                 <div class="flex justify-between items-center">
@@ -202,11 +200,10 @@ if (!empty($_SESSION["login_success"])) {
 
                         foreach ($taches as $tache):
                             ?>
-                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move" data-task-id="<?= $tache['id'] ?>">
+                            <div class="task-card bg-white dark:bg-dark-card rounded-lg shadow-md p-4 mb-4 cursor-move">
                                 <div class="flex justify-between items-start mb-3">
                                     <h3 class="text-lg font-semibold"><?= $tache["title"] ?></h3>
                                     <span class="text-sm text-blue-600 dark:text-blue-400"><?= $tache["tag"] ?></span>
-                                    <span class="hidden text-xs text-gray-500">ID: <?= $tache['id'] ?></span>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-300 mb-3"><?= $tache["description"] ?></p>
                                 <div class="flex justify-between items-center">
@@ -394,186 +391,161 @@ if (!empty($_SESSION["login_success"])) {
         }
     </style>
 
-    <script>
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
+<script>
+    // Dark mode functionality
+    const darkModeToggle = document.getElementById('darkModeToggle');
 
-        // Check for saved dark mode preference
-        if (localStorage.getItem('darkMode') === 'true' ||
-            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'true' ||
+        (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    }
 
-        // Toggle dark mode
-        darkModeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-        });
+    // Toggle dark mode
+    darkModeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+    });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const containers = document.querySelectorAll('.kanban-column');
+    document.addEventListener('DOMContentLoaded', () => {
+        const containers = document.querySelectorAll('.kanban-column');
 
-            if (typeof Draggable !== 'undefined') {
-                const sortable = new Draggable.Sortable(containers, {
-                    draggable: '.task-card',
-                    handle: '.task-card',
-                    mirror: {
-                        constrainDimensions: true,
+        if (typeof Draggable !== 'undefined') {
+            const sortable = new Draggable.Sortable(containers, {
+                draggable: '.task-card',
+                handle: '.task-card',
+                mirror: {
+                    constrainDimensions: true,
+                }
+            });
+
+            sortable.on('drag:start', (evt) => {
+                evt.source.style.opacity = '0.5';
+            });
+
+            sortable.on('drag:stop', (evt) => {
+                evt.source.style.opacity = '1';
+            });
+
+            sortable.on('sortable:stop', (evt) => {
+                const task = evt.data.dragEvent.data.source;
+                const newStatus = evt.data.newContainer.dataset.status;
+
+                // Update task styling based on new status
+                updateTaskStyle(task, newStatus);
+
+                // Send native AJAX request to update the task status
+                fetch('/update_status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest' // Add this header for security
+                    },
+                    body: JSON.stringify({ taskId: task.dataset.taskId, newStatus: newStatus })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                });
-
-                sortable.on('drag:start', (evt) => {
-                    evt.source.style.opacity = '0.5';
-                });
-
-                sortable.on('drag:stop', (evt) => {
-                    evt.source.style.opacity = '1';
-                });
-
-                sortable.on('sortable:stop', (evt) => {
-                    const task = evt.data.dragEvent.data.source;
-                    const taskId = task.dataset.taskId; // Get the task ID
-                    const newStatus = evt.data.newContainer.dataset.status;
-
-                    // Send AJAX request to update the task status
-                    $.ajax({
-                        url: '/update_status', // Ensure this path is correct
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ taskId: taskId, newStatus: newStatus }),
-                        success: (response) => {
-                            const result = JSON.parse(response);
-                            if (result.success) {
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: result.message,
-                                    icon: 'success',
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: result.message,
-                                    icon: 'error',
-                                });
-                            }
-                        },
-                        error: (jqXHR, textStatus, errorThrown) => {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Failed to update task status : ' + textStatus,
-                                icon: 'error',
-                            });
-                        }
+                    return response.json();
+                })
+                .then(result => {
+                    if (result.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: result.message,
+                            icon: 'success',
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: result.message,
+                            icon: 'error',
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating task status:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to update task status: ' + error.message,
+                        icon: 'error',
                     });
                 });
-            }
-        });
-
-        // Update task card styling based on status
-        function updateTaskStyle(taskElement, status) {
-            const statusBadge = taskElement.querySelector('.status-badge');
-            if (statusBadge) {
-                statusBadge.className = 'status-badge px-2 py-1 rounded text-sm';
-                switch (status) {
-                    case 'todo':
-                        statusBadge.classList.add('bg-gray-100', 'text-gray-600');
-                        statusBadge.textContent = 'Todo';
-                        break;
-                    case 'in-progress':
-                        statusBadge.classList.add('bg-yellow-100', 'text-yellow-600');
-                        statusBadge.textContent = 'In Progress';
-                        break;
-                    case 'completed':
-                        statusBadge.classList.add('bg-green-100', 'text-green-600');
-                        statusBadge.textContent = 'Completed';
-                        break;
-                }
-            }
-        }
-
-        // Show task detail modal
-        function showTaskModal(taskId) {
-            document.getElementById('taskDetailModal').classList.remove('hidden');
-            // Here you would typically fetch task details from the server
-        }
-
-        // Hide task detail modal
-        function hideTaskModal() {
-            document.getElementById('taskDetailModal').classList.add('hidden');
-        }
-
-        // Profile Modal Functions
-        function showProfileModal() {
-            document.getElementById('profileModal').classList.remove('hidden');
-        }
-
-        function hideProfileModal() {
-            document.getElementById('profileModal').classList.add('hidden');
-        }
-
-        function togglePasswordSection() {
-            const passwordSection = document.getElementById('passwordSection');
-            const passwordArrow = document.getElementById('passwordArrow');
-            passwordSection.classList.toggle('hidden');
-            passwordSection.classList.toggle('show');
-            passwordArrow.classList.toggle('rotate-180');
-        }
-
-        // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            const profileModal = document.getElementById('profileModal');
-            const taskDetailModal = document.getElementById('taskDetailModal');
-
-            if (e.target === profileModal) {
-                hideProfileModal();
-            }
-            if (e.target === taskDetailModal) {
-                hideTaskModal();
-            }
-        });
-
-        // Prevent modal close when clicking inside the modal content
-        document.querySelectorAll('.modal > div').forEach(modalContent => {
-            modalContent.addEventListener('click', (e) => {
-                e.stopPropagation();
             });
-        });
-
-    </script>
-    <?php
-// Get raw POST data
-$data = file_get_contents('php://input');
-
-// Decode JSON data
-$decodedData = json_decode($data, true);
-
-// Check if data is valid
-if (isset($decodedData['taskId']) && isset($decodedData['newStatus'])) {
-    $taskId = $decodedData['taskId'];
-    $newStatus = $decodedData['newStatus'];
-
-    // Example: Update the database
-    // Replace with your actual database connection and query
-    $res = new ConnectionDB();
-    $pdo = $res->getConnection();
-    $stmt = $pdo->prepare('UPDATE tasks SET status = :status WHERE id = :id');
-    $stmt->bindParam(':status', $newStatus);
-    $stmt->bindParam(':id', $taskId);
-
-    try {
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Task updated successfully']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to update task']);
         }
-    } catch (PDOException $e) {
-        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
-    }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Invalid data received']);
-}
-?>
+    });
 
+    // Update task card styling based on status
+    function updateTaskStyle(taskElement, status) {
+        const statusBadge = taskElement.querySelector('.status-badge');
+        if (statusBadge) {
+            statusBadge.className = 'status-badge px-2 py-1 rounded text-sm';
+            switch (status) {
+                case 'todo':
+                    statusBadge.classList.add('bg-gray-100', 'text-gray-600');
+                    statusBadge.textContent = 'Todo';
+                    break;
+                case 'in-progress':
+                    statusBadge.classList.add('bg-yellow-100', 'text-yellow-600');
+                    statusBadge.textContent = 'In Progress';
+                    break;
+                case 'completed':
+                    statusBadge.classList.add('bg-green-100', 'text-green-600');
+                    statusBadge.textContent = 'Completed';
+                    break;
+            }
+        }
+    }
+
+    // Show task detail modal
+    function showTaskModal(taskId) {
+        document.getElementById('taskDetailModal').classList.remove('hidden');
+        // Here you would typically fetch task details from the server
+    }
+
+    // Hide task detail modal
+    function hideTaskModal() {
+        document.getElementById('taskDetailModal').classList.add('hidden');
+    }
+
+    // Profile Modal Functions
+    function showProfileModal() {
+        document.getElementById('profileModal').classList.remove('hidden');
+    }
+
+    function hideProfileModal() {
+        document.getElementById('profileModal').classList.add('hidden');
+    }
+
+    function togglePasswordSection() {
+        const passwordSection = document.getElementById('passwordSection');
+        const passwordArrow = document.getElementById('passwordArrow');
+        passwordSection.classList.toggle('hidden');
+        passwordSection.classList.toggle('show');
+        passwordArrow.classList.toggle('rotate-180');
+    }
+
+    // Close modals when clicking outside
+    window.addEventListener('click', (e) => {
+        const profileModal = document.getElementById('profileModal');
+        const taskDetailModal = document.getElementById('taskDetailModal');
+
+        if (e.target === profileModal) {
+            hideProfileModal();
+        }
+        if (e.target === taskDetailModal) {
+            hideTaskModal();
+        }
+    });
+
+    // Prevent modal close when clicking inside the modal content
+    document.querySelectorAll('.modal > div').forEach(modalContent => {
+        modalContent.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+</script>
 </body>
 
 </html>

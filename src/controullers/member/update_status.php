@@ -1,37 +1,57 @@
 <?php
-// Get raw POST data
-   $data = array(
-       'key1' => 'value1',
-       'key2' => 'value2'
-   );
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-   header('Content-Type: application/json'); // Crucial!
-   echo json_encode($data);
-   
-// Check if data is valid
-if (isset($decodedData['taskId']) && isset($decodedData['newStatus'])) {
-    $taskId = $decodedData['taskId'];
-    $newStatus = $decodedData['newStatus'];
+// Start output buffering
+ob_start();
 
-    // Database connection
-    $res = new ConnectionDB();
-    $pdo = $res->getConnection();
+// Log the request method
+error_log('Request Method: ' . $_SERVER['REQUEST_METHOD']);
 
-    // Prepare the SQL statement to update the status
-    $stmt = $pdo->prepare('UPDATE tasks SET status = :status WHERE id = :id');
-    $stmt->bindParam(':status', $newStatus);
-    $stmt->bindParam(':id', $taskId);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the raw POST data
+    $data = file_get_contents('php://input');
+    error_log('Raw POST data: ' . $data); // Log the raw POST data
+    $decodedData = json_decode($data, true);
 
-    try {
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Task updated successfully']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to update task']);
+    // Check if taskId and newStatus are set
+    if (isset($decodedData['taskId']) && isset($decodedData['newStatus'])) {
+        $taskId = $decodedData['taskId'];
+        $newStatus = $decodedData['newStatus'];
+
+        // Database connection
+        try {
+            $res = new ConnectionDB();
+            $pdo = $res->getConnection();
+
+            // Prepare the SQL statement to update the task status
+            $stmt = $pdo->prepare('UPDATE tache SET status = :status WHERE id = :id');
+            $stmt->bindParam(':status', $newStatus);
+            $stmt->bindParam(':id', $taskId);
+
+            if ($stmt->execute()) {
+                $response = ['success' => true, 'message' => 'Task updated successfully'];
+            } else {
+                $response = ['success' => false, 'message' => 'Failed to update task'];
+            }
+        } catch (PDOException $e) {
+            error_log('Database error: ' . $e->getMessage()); // Log database errors
+            $response = ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
         }
-    } catch (PDOException $e) {
-        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    } else {
+        $response = ['success' => false, 'message' => 'Invalid data received'];
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid data received']);
+    $response = ['success' => false, 'message' => 'Invalid request method'];
 }
+
+// Set the response header to JSON
+header('Content-Type: application/json');
+
+// Send the JSON response
+echo json_encode($response);
+
+// Clean the output buffer and stop buffering
+ob_end_flush();
 ?>
